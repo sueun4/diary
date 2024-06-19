@@ -1,64 +1,78 @@
-// script.js
-document.addEventListener("DOMContentLoaded", function() {
-    flatpickr("#note-date", {
-        dateFormat: "Y년 m월 d일",
-        onChange: function(selectedDates, dateStr, instance) {
-            document.getElementById('note-date').value = dateStr;
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        dateClick: function(info) {
+            showEntriesForDate(info.dateStr);
         }
     });
-    updateCurrentMonth();
+    calendar.render();
+    loadEntries();
 });
 
-function addNote() {
-    const noteDate = document.getElementById('note-date').value;
-    const location = document.getElementById('location').value;
-    const intensity = document.getElementById('intensity').value;
-    const noteContent = document.getElementById('note-content').value;
+function addDiaryEntry() {
+    const date = document.getElementById('date-input').value;
+    const location = document.getElementById('location-input').value;
+    const intensity = document.getElementById('intensity-input').value;
+    const note = document.getElementById('note-input').value;
 
-    if (!noteDate || !location || !noteContent) {
-        alert('날짜, 위치, 운동 강도, 한 줄 소감을 입력하세요.');
-        return;
-    }
+    const entry = {
+        date: date,
+        location: location,
+        intensity: intensity,
+        note: note
+    };
 
-    const notesContainer = document.getElementById('notes-container');
-
-    const noteElement = document.createElement('li');
-    noteElement.classList.add('note');
-
-    const noteDateElement = document.createElement('div');
-    noteDateElement.classList.add('note-date');
-    noteDateElement.textContent = noteDate;
-
-    const noteLocationElement = document.createElement('div');
-    noteLocationElement.classList.add('note-location');
-    noteLocationElement.textContent = `운동한 위치: ${location}`;
-
-    const noteIntensityElement = document.createElement('div');
-    noteIntensityElement.classList.add('note-intensity');
-    noteIntensityElement.textContent = `운동 강도: ${intensity}`;
-
-    const noteContentElement = document.createElement('div');
-    noteContentElement.classList.add('note-content');
-    noteContentElement.textContent = noteContent;
-
-    noteElement.appendChild(noteDateElement);
-    noteElement.appendChild(noteLocationElement);
-    noteElement.appendChild(noteIntensityElement);
-    noteElement.appendChild(noteContentElement);
-
-    notesContainer.appendChild(noteElement);
-
-    // Clear inputs
-    document.getElementById('note-date').value = '';
-    document.getElementById('location').value = '';
-    document.getElementById('intensity').value = '상';
-    document.getElementById('note-content').value = '';
+    saveEntry(entry);
+    displayEntry(entry, false);
 }
 
-function updateCurrentMonth() {
-    const now = new Date();
-    const month = now.toLocaleString('default', { month: 'long' });
-    const year = now.getFullYear();
-    document.getElementById('current-month').textContent = `${year}년 ${month}`;
+function saveEntry(entry) {
+    let entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+    entries.push(entry);
+    localStorage.setItem('diaryEntries', JSON.stringify(entries));
 }
 
+function loadEntries() {
+    let entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+    entries.forEach(entry => {
+        displayEntry(entry, false);
+    });
+}
+
+function displayEntry(entry, visible) {
+    const entryDiv = document.createElement('div');
+    entryDiv.className = 'diary-entry';
+    entryDiv.style.display = visible ? 'block' : 'none';
+    entryDiv.innerHTML = `
+        <p>날짜: ${entry.date}</p>
+        <p>위치: ${entry.location}</p>
+        <p>운동 강도: ${entry.intensity}</p>
+        <p>${entry.note}</p>
+        <button class="delete-button" onclick="deleteEntry(this)">삭제</button>
+    `;
+    document.getElementById('diary-entries').appendChild(entryDiv);
+}
+
+function showEntriesForDate(date) {
+    document.querySelectorAll('.diary-entry').forEach(entry => {
+        if (entry.innerHTML.includes(`날짜: ${date}`)) {
+            entry.style.display = 'block';
+        } else {
+            entry.style.display = 'none';
+        }
+    });
+}
+
+function deleteEntry(button) {
+    let entryDiv = button.parentElement;
+    let date = entryDiv.querySelector('p').innerText.split(': ')[1];
+    entryDiv.remove();
+    removeEntryFromStorage(date);
+}
+
+function removeEntryFromStorage(date) {
+    let entries = JSON.parse(localStorage.getItem('diaryEntries')) || [];
+    entries = entries.filter(entry => entry.date !== date);
+    localStorage.setItem('diaryEntries', JSON.stringify(entries));
+}
