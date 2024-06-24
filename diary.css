@@ -7,19 +7,21 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    
 }
 
 .container {
     width: 90%;
     height: 90%;
-    padding-top:300px;
+    padding-top:200px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #3e3e3e;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-/*     overflow: hidden; */
+    overflow: hidden;
 }
 
 .box {
