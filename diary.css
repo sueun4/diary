@@ -67,7 +67,7 @@ body {
     background-color: #7c897f;
     padding: 10px;
     border-radius: 5px;
-    display: none; /* Default hidden */
+    display: none; 
 }
 
 .delete-button {
