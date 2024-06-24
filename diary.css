@@ -19,7 +19,7 @@ body {
     background-color: #3e3e3e;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
+/*     overflow: hidden; */
 }
 
 .box {
@@ -52,7 +52,7 @@ body {
 
 #calendar {
     width: 40%;
-    height:90%;
+    height:80%;
     padding: 20px;
 }
 
