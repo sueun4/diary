@@ -51,7 +51,7 @@ body {
 
 #calendar-container {
     width: 40%;
-    padding-bottom: 40%; /* 1:1 비율을 유지하기 위해 부모 요소에 패딩을 설정 */
+    padding-bottom: 40%;
     position: relative;
 }
 
@@ -64,7 +64,7 @@ body {
 
 .diary-entry {
     margin-bottom: 10px;
-    background-color: #e8cece;
+    background-color: #7c897f;
     padding: 10px;
     border-radius: 5px;
     display: none; /* Default hidden */
