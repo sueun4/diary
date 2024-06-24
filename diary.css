@@ -47,11 +47,19 @@ body {
     border: 1px solid #ccc;
 }
 
+
+
+#calendar-container {
+    width: 40%;
+    padding-bottom: 40%; /* 1:1 비율을 유지하기 위해 부모 요소에 패딩을 설정 */
+    position: relative;
+}
+
+
 #calendar {
     width: 40%;
     height:90%;
     padding: 20px;
-    padding-bottom: 100%; 
 }
 
 .diary-entry {
